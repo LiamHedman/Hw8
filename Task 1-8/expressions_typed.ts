@@ -90,7 +90,7 @@ function is_nbinary(expr: NumExpr): expr is BinaryNExpr {
  * @param expr an expression
  * @returns the operator of expr
  */
-function get_noperator(expr: any): any {
+function get_noperator(expr: NumExpr):  string{
     return expr[0];
 }
 
