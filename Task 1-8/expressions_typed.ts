@@ -256,7 +256,7 @@ function evaluate_number(expr: NumExpr): Literal<number> {
         }
     function evaluate_length(expr: LengthExpr): Literal<number> {
         const stringExpr = get_sarg(expr);
-        const evaluatedString = evaluate_string(stringExpr); 
+        const evaluatedString = evaluate_string(stringExpr)[1]; 
         return make_literal(evaluatedString.length);
     }
     return is_nbinary(expr)
@@ -278,7 +278,7 @@ function evaluate_string(expr: StringExpr): Literal<string> {
         return make_literal(leftResult[1] + rightResult[1]);
     }
     function evaluate_stringify(expr: StringifyExpr): Literal<string> {
-        return make_literal((expr[1]).toString());
+        return make_literal(evaluate_number(expr[1])[1].toString());
     }
     return is_concat_expr(expr)
         ? evaluate_concat(expr)
