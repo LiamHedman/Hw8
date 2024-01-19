@@ -90,7 +90,7 @@ function is_nbinary(expr: NumExpr): expr is BinaryNExpr {
  * @param expr an expression
  * @returns the operator of expr
  */
-function get_noperator(expr: NumExpr):  string{
+function get_noperator(expr: BinaryNExpr):  string{
     return expr[0];
 }
 
@@ -99,7 +99,7 @@ function get_noperator(expr: NumExpr):  string{
  * @param expr the expression
  * @returns true iff expr is a sum
  */
-function is_nadd(expr: any): any {
+function is_nadd(expr: BinaryNExpr): boolean {
     return get_noperator(expr) === "+";
 }
 
@@ -108,7 +108,7 @@ function is_nadd(expr: any): any {
  * @param expr the expression
  * @returns true iff expr is a difference
  */
-function is_nsub(expr: any): any {
+function is_nsub(expr: BinaryNExpr): boolean {
     return get_noperator(expr) === "-";
 }
 
@@ -117,8 +117,8 @@ function is_nsub(expr: any): any {
  * @param str the argument of the length operator
  * @returns the unary expression "length(str)"
  */
-function make_length_expr(str: any): any {
-    return ["length", str]
+function make_length_expr(str: StringExpr): LengthExpr {
+    return ["length", str];
 }
 
 /**
@@ -135,7 +135,7 @@ function is_length_expr(num: NumExpr): num is LengthExpr {
  * @param expr an expression
  * @returns the argument of expr
  */
-function get_sarg(expr: any): any {
+function get_sarg(expr: LengthExpr): StringExpr {
     return expr[1];
 }
 
@@ -144,7 +144,7 @@ function get_sarg(expr: any): any {
  * @param expr the argument of the stringify operator
  * @returns the unary expression "stringify(expr)"
  */
-function make_stringify_expr(expr : any): any {
+function make_stringify_expr(expr : NumExpr): StringExpr {
     return ["stringify", expr];
 }
 
@@ -162,7 +162,7 @@ function is_stringify_expr(str: StringExpr): str is StringifyExpr {
  * @param expr an expression
  * @returns the argument of expr
  */
-function get_narg(expr: any): any {
+function get_narg(expr: StringifyExpr): NumExpr {
     return expr[1];
 }
 
@@ -172,7 +172,7 @@ function get_narg(expr: any): any {
  * @param str2 the suffix of the concatenated string
  * @returns the concatenated string str1 + str2
  */
-function make_concat_expr(str1: any, str2: any): any {
+function make_concat_expr(str1: StringExpr, str2: StringExpr): ConcatExpr {
     return ["concat", str1, str2];
 }
 
@@ -190,7 +190,7 @@ function is_concat_expr(str: StringExpr): str is ConcatExpr {
  * @param expr an expression
  * @returns the prefix of expr
  */
-function get_slhs(str: any): any {
+function get_slhs(str: ConcatExpr): StringExpr {
     return str[1];
 }
 
@@ -199,7 +199,7 @@ function get_slhs(str: any): any {
  * @param expr an expression
  * @returns the suffix of expr
  */
-function get_srhs(str: any): any {
+function get_srhs(str: ConcatExpr): StringExpr {
     return str[2];
 }
 
@@ -209,7 +209,7 @@ function get_srhs(str: any): any {
  * @param val value of the literal
  * @returns a literal with value val
  */
-function make_literal<T>(val: T): any {
+function make_literal<T>(val: T): Literal<T> {
     return ["literal", val];
 }
 
@@ -237,7 +237,7 @@ function is_nliteral(str: NumExpr): str is Literal<number> {
  * @param expr the literal expression
  * @returns the value of expr
  */
-function get_value<T>(expr: any): T {
+function get_value<T>(expr: Literal<T>): T {
     return expr[1];
 }
 
