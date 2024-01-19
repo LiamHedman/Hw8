@@ -247,11 +247,17 @@ function get_value<T>(expr: Literal<T>): T {
  * @returns the result of evaluating expr.
  */
 function evaluate_number(expr: NumExpr): Literal<number> {
-    function evaluate_binary(bin_expr: any): any {
-        // your code here
-    }
-    function evaluate_length(expr: any): any {
-        // your code here
+    function evaluate_binary(bin_expr: BinaryNExpr): Literal<number> {
+        const leftVal = evaluate_number(get_nlhs(bin_expr))[1]; 
+        const rightVal = evaluate_number(get_nrhs(bin_expr))[1];
+        return get_noperator(bin_expr) === '+'
+               ? make_literal(leftVal + rightVal)
+               : make_literal(leftVal - rightVal);
+        }
+    function evaluate_length(expr: LengthExpr): Literal<number> {
+        const stringExpr = get_sarg(expr);
+        const evaluatedString = evaluate_string(stringExpr); 
+        return make_literal(evaluatedString.length);
     }
     return is_nbinary(expr)
         ? evaluate_binary(expr)
@@ -266,11 +272,13 @@ function evaluate_number(expr: NumExpr): Literal<number> {
  * @returns the result of evaluating expr.
  */
 function evaluate_string(expr: StringExpr): Literal<string> {
-    function evaluate_concat(concat_expr: any): any {
-        // your code here
+    function evaluate_concat(concat_expr: ConcatExpr): Literal<string> {
+        const leftResult = evaluate_string(concat_expr[1]);
+        const rightResult = evaluate_string(concat_expr[2]);
+        return make_literal(leftResult[1] + rightResult[1]);
     }
-    function evaluate_stringify(expr: any): any {
-        // your code here
+    function evaluate_stringify(expr: StringifyExpr): Literal<string> {
+        return make_literal((expr[1]).toString());
     }
     return is_concat_expr(expr)
         ? evaluate_concat(expr)
