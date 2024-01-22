@@ -1,5 +1,6 @@
-// TODO: your imports here
-// (only list, stack, queue_immutable, or queue_array from ../lib are allowed)
+import {Stack, NonEmptyStack, empty, is_empty, 
+        push, top, pop 
+} from '/Users/Liam Hedman/OneDrive/Dokument/skola/PKD/Code/lib/stack';
 
 
 /**
@@ -7,14 +8,22 @@
  * backwards navigation.
  * TODO: fill in description
  */
-export type BrowserHistory = // TODO: your code here
+export type BrowserHistory = {
+    backHistory: Stack<string>;
+    fowardHistory: Stack<string>;
+    currentPage: string;
+};
 
 /**
  * Creates a fresh browser history.
  * @returns Creates an empty browser history.
  */
 export function new_browser_history(): BrowserHistory {
-    // TODO: your code here
+    return {
+        backHistory: empty(),
+        fowardHistory:empty(),
+        currentPage: ""
+    };
 }
 
 /**
@@ -23,7 +32,7 @@ export function new_browser_history(): BrowserHistory {
  * @returns The URL of the currently open website in history.
  */
 export function current_page(history: BrowserHistory): string {
-    // TODO: your code here
+    return history.currentPage;
 }
 
 
@@ -37,7 +46,11 @@ export function current_page(history: BrowserHistory): string {
  *     no forward pages stored.
  */
 export function visit_page(history: BrowserHistory, page: string): BrowserHistory {
-    // TODO: your code here
+    return history = {
+        backHistory: push(history.currentPage, history.backHistory),
+        fowardHistory: empty(),
+        currentPage: page
+    };
 }
 
 /**
@@ -48,7 +61,14 @@ export function visit_page(history: BrowserHistory, page: string): BrowserHistor
  *    'history' unchanged if there is no page to go back to.
  */
 export function go_back(history: BrowserHistory): BrowserHistory {
-    // TODO: your code here
+    if (!is_empty(history.backHistory)) {
+        return history = {
+            fowardHistory: push(history.currentPage, history.fowardHistory),
+            currentPage: top(history.backHistory),
+            backHistory: pop(history.backHistory)
+        };
+    }
+    return history;
 }
 
 /**
@@ -59,5 +79,12 @@ export function go_back(history: BrowserHistory): BrowserHistory {
  *     page to go forward to.
  */
 export function go_forward(history: BrowserHistory): BrowserHistory {
-    // TODO: your code here
+    if (!is_empty(history.fowardHistory)) {
+        return history = {
+            backHistory: push(history.currentPage, history.backHistory),
+            currentPage: top(history.fowardHistory),
+            fowardHistory: pop(history.fowardHistory)
+        };
+    }
+    return history;
 }
